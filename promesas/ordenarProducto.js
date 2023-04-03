@@ -1,6 +1,6 @@
 function ordenarProducto(producto) {
     return new Promise((resolve, reject) => {
-        console.log(`Ordenando una: ${producto}.`);
+        console.log(`Ordenando : ${producto} de la tienda.`);
         setTimeout(()=> {
             if (producto === 'taza') {
                 resolve ('Ordenando una taza con el logo de la tienda...')
@@ -22,17 +22,37 @@ function procesarPedido(respuesta) {
     });
 }
 
+//-----------------ENCANDENANDO PROMESAS----------------------
 
-ordenarProducto('taza') //se llama a la primera promesa que retorna una respuesta
-    .then(respuesta => {
+// ordenarProducto('taza') //se llama a la primera promesa que retorna una respuesta
+//     .then(respuesta => {
+//         console.log('Respuesta recibida');
+//         console.log(respuesta);
+//         return procesarPedido(respuesta); // retornamos la ejecucion de la segunda promesa 
+//         //se ejecuta unicamente si la primera se cumple correctamente
+//     })
+//     .then(respuestaProcesada => {
+//         console.log(respuestaProcesada);
+//     })
+//     .catch(err => {
+//         console.log(err);
+//     });
+
+//--------------ASYNC Y AWAIT------------------
+// El codigo se va a ejecutar linea por linea ya que la ejecución va a esperar que los procesos
+// internos se ejecuten para pasar a leer el proximo sin importar el tiempo de ejecución.
+
+async function realizarPedido(producto) {
+    try {
+        const respuesta = await ordenarProducto(producto);
         console.log('Respuesta recibida');
-        console.log(respuesta);
-        return procesarPedido(respuesta); // retornamos la ejecucion de la segunda promesa 
-        //se ejecuta unicamente si la primera se cumple correctamente
-    })
-    .then(respuestaProcesada => {
+        const respuestaProcesada = await procesarPedido(respuesta);
         console.log(respuestaProcesada);
-    })
-    .catch(err => {
-        console.log(err);
-    });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+realizarPedido('taza');
+
+// las funciones asíncronas retornan promesas
